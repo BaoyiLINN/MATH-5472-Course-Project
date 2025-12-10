@@ -1,103 +1,162 @@
-# MATH-5472-Course-Project
-Reproducible code for the paper
-“What If Without the Proportional Hazards Method?”
-Author: Baoyi LIN (21206217)
-Course: MATH 5472 — Computer Age Statistical Inference
+# What If Without the Proportional Hazards Method?
+### MATH 5472 Course Project · Survival Analysis under PH and Non-PH Scenarios  
+Author: **LIN Baoyi (21206217)**  
+Reproducibility Website: https://github.com/BaoyiLINN/MATH-5472-Course-Project
 
-Overview
+---
 
-This repository contains an end-to-end reproducible pipeline for:
+## Overview
 
-Simulation study comparing:
+This repository contains all reproducible code for the course project **"What If Without the Proportional Hazards Method?"**, including:
 
-Cox Proportional Hazards model
+1. **Simulation experiments** comparing Cox PH, AFT, and time-varying coefficient models under proportional and non-proportional hazards.
+2. **Real-world analysis** on the Mayo Clinic **Primary Biliary Cirrhosis (PBC)** dataset:
+   - PH diagnostics (Schoenfeld residuals)
+   - Kaplan–Meier stratification
+   - Prediction error curves (PEC) and Integrated Brier Score (IBS)
 
-Accelerated Failure Time (AFT) model
+All figures used in the final report are generated from the scripts in this repository.
 
-Time-varying coefficient Cox model (non-PH)
+---
 
-Real-data analysis using the PBC (Primary Biliary Cirrhosis) dataset from the survival R package.
+## Repository Structure
 
-Both experiments support the conclusions in the paper regarding the strengths and limitations of the Proportional Hazards (PH) assumption.
+```
+.
+├── 01_simulation_ph_vs_nonph.R      # Simulation study: PH vs Non-PH scenarios
+├── 02_realdata_pbc_analysis.R       # Real-data analysis on PBC dataset
+├── figures/                         # Auto-generated figures (after running scripts)
+│   ├── simulation/
+│   └── pbc/
+└── results/                         # RDS / CSV intermediate outputs
+```
 
-Repository Structure
-cox-nonph-analysis/
-│
-├── R/
-│   ├── 01_simulation_ph_vs_nonph.R        # Simulation study
-│   ├── 02_realdata_pbc_analysis.R         # Real PBC dataset analysis
-│
-├── results/
-│   ├── simulation/                        # Output from simulations
-│   ├── pbc/                               # Output from real data analysis
-│
-├── figures/                               # Plots used in the paper
-│
-├── README.md                              # Project documentation
-└── .gitignore
+---
 
-Installation
+# 1. Simulation Study  
+### File: `01_simulation_ph_vs_nonph.R`
 
-The code requires R ≥ 4.2.0.
+This script reproduces **Section 4.1** of the paper:
 
-Install required packages:
+- Scenario A: True PH  
+- Scenario B: Strongly violated PH (effect reversal)  
+- Models compared:
+  - Cox Proportional Hazards
+  - Log-normal AFT
+  - Time-varying coefficient Cox model  
+- Metrics computed:
+  - Bias and RMSE of effect estimates
+  - 95% CI coverage
+  - C-index
+  - Integrated Brier Score (IBS)
 
-install.packages(c("survival", "dplyr", "purrr", "ggplot2", "survminer", "pec"))
+### To run:
 
-How to Reproduce the Experiments
-▶ 1. Simulation Study
+```bash
+Rscript 01_simulation_ph_vs_nonph.R
+```
 
-Run the following script in R:
+Outputs will be saved into:
 
-source("R/01_simulation_ph_vs_nonph.R")
+```
+figures/simulation/
+results/simulation/
+```
 
+---
 
-This script will:
+# 2. Real-World Data Experiment (PBC)
+### File: `02_realdata_pbc_analysis.R`
 
-Generate datasets under PH and non-PH scenarios
+This script performs:
 
-Fit Cox / AFT / time-varying Cox models
+- Cox PH model fitting
+- Schoenfeld residual diagnostics  
+- KM curves (high vs low bilirubin)
+- Time-varying coefficient Cox modeling
+- PEC curves and IBS (Cox vs TVC)
 
-Compute bias, RMSE, coverage, C-index, IBS
+### To run:
 
-Save results to: results/simulation/
+```bash
+Rscript 02_realdata_pbc_analysis.R
+```
 
-Produce figures under: figures/simulation/
+Figures will be generated in:
 
-▶ 2. Real Data Analysis (PBC dataset)
+```
+figures/pbc/
+```
 
-Run:
+---
 
-source("R/02_realdata_pbc_analysis.R")
+## Installation & Dependencies
 
+The analysis uses standard R survival-analysis packages.
 
-This script will:
+### Install all required packages:
 
-Load the PBC dataset
+```r
+install.packages(c(
+  "survival",
+  "survminer",
+  "ggplot2",
+  "dplyr",
+  "splines",
+  "pec"
+))
+```
 
-Fit Cox model and test PH assumption
+---
 
-Plot Schoenfeld residuals and survival curves
+## How to Fully Reproduce the Paper
 
-Compare Cox vs AFT vs time-varying Cox
+1. Clone this repository:
 
-Save outputs to: results/pbc/
+```bash
+git clone https://github.com/BaoyiLINN/MATH-5472-Course-Project.git
+cd MATH-5472-Course-Project
+```
 
-Generate figures used in the paper
+2. Run simulation:
 
-Reproducibility
+```bash
+Rscript 01_simulation_ph_vs_nonph.R
+```
 
-This repository follows the NeurIPS reproducibility guidelines:
+3. Run PBC analysis:
 
-All analyses are contained in R scripts
+```bash
+Rscript 02_realdata_pbc_analysis.R
+```
 
-All results can be reproduced by running the corresponding script once dependencies are installed
+4. All figures will appear in the `figures/` directory.
 
-Figures used in the paper are stored in figures/ and regenerated automatically
+5. Insert figures into the LaTeX paper (neurips format).
 
-No external private datasets are required
+---
 
-Contact
+## Session Information
 
-For questions, please contact:
-Baoyi LIN — blinan@connect.ust.hk
+To ensure reproducibility, your R session info is automatically saved into:
+
+```
+results/sessionInfo.txt
+```
+
+---
+
+## Citation
+
+If reusing the code, please cite:
+
+```
+LIN, B. (2025). What If Without the Proportional Hazards Method?
+MATH 5472 Course Project, HKUST.
+```
+
+---
+
+## License
+
+MIT License.
